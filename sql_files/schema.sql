@@ -52,7 +52,7 @@ CREATE TABLE user_library (
         ON DELETE CASCADE
         ON UPDATE CASCADE,
 
-    CHECK (status IN ('playing', 'completed', 'wishlist'))
+    CHECK (status IN ('wishlist', 'owned', 'playing', 'completed'))
 );
 
 CREATE TABLE achievements (

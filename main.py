@@ -1,5 +1,6 @@
 from database import *
 
+
 def main():
     connection = create_connection()
     if not connection:
@@ -11,9 +12,10 @@ def main():
         print("2. Add Game")
         print("3. Delete User + Library")
         print("4. Add Game to Library + Set Status")
-        print("5. View All User Libraries")
+        print("5. View Libraries (Filter)")
         print("6. Update Playtime")
-        print("7. Exit")
+        print("7. Add Genre to Game")
+        print("8. Exit")
 
         choice = input("Choose: ")
 
@@ -43,7 +45,25 @@ def main():
                 add_to_library_and_set_status(connection, user_id, game_id, status)
 
             elif choice == "5":
-                view_all_libraries(connection)
+                print("\n--- Filter Options ---")
+
+                username = input("Username (blank = all): ").strip()
+                genre = input("Genre (blank = all): ").strip()
+                min_hours_input = input("Minimum hours (blank = none): ").strip()
+
+                username = username if username else None
+                genre = genre if genre else None
+
+                if min_hours_input:
+                    try:
+                        min_hours = int(min_hours_input)
+                    except ValueError:
+                        print("Invalid number")
+                        min_hours = None
+                else:
+                    min_hours = None
+
+                view_all_libraries(connection, username, genre, min_hours)
 
             elif choice == "6":
                 user_id = int(input("User ID: "))
@@ -52,13 +72,18 @@ def main():
                 update_playtime(connection, user_id, game_id, hours)
 
             elif choice == "7":
+                game_id = int(input("Game ID: "))
+                genre = input("Genre: ")
+                add_game_genre(connection, game_id, genre)
+
+            elif choice == "8":
                 break
 
             else:
-                print("❌ Invalid choice")
+                print("Invalid choice")
 
         except ValueError:
-            print("❌ Invalid input type")
+            print("Invalid input type")
 
     connection.close()
 

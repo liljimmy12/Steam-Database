@@ -2,7 +2,7 @@ import mysql.connector
 from mysql.connector import Error
 
 
-# ---------------- CONNECTION ----------------
+# connection
 def create_connection():
     try:
         connection = mysql.connector.connect(
@@ -17,12 +17,14 @@ def create_connection():
         return None
 
 
-# ---------------- USERS ----------------
+# users
 def add_user(connection, username, email):
     try:
         cursor = connection.cursor()
-        query = "INSERT INTO users (username, email) VALUES (%s, %s)"
-        cursor.execute(query, (username, email))
+        cursor.execute(
+            "INSERT INTO users (username, email) VALUES (%s, %s)",
+            (username, email)
+        )
         connection.commit()
         print("User added")
     except Error as e:
@@ -37,7 +39,7 @@ def view_users(connection):
         cursor.execute("SELECT user_id, username, email FROM users")
         results = cursor.fetchall()
 
-        print("\nUsers:")
+        print("\nUsers")
         for row in results:
             print(row)
 
@@ -50,55 +52,42 @@ def view_users(connection):
 def delete_user(connection, user_id):
     try:
         cursor = connection.cursor()
-
         cursor.execute("DELETE FROM users WHERE user_id = %s", (user_id,))
-
         connection.commit()
         print("User deleted")
-
     except Error as e:
         print(f"Error: {e}")
+        connection.rollback()
     finally:
         cursor.close()
 
 
-# ---------------- GAMES + GENRE ----------------
+# games and genre
 def add_game_with_genre(connection, title, developer, year, price, genre_name):
     try:
         cursor = connection.cursor()
 
-        connection.start_transaction()
-
-        # Insert game
         cursor.execute(
-            """
-            INSERT INTO games (title, developer, release_year, price)
-            VALUES (%s, %s, %s, %s)
-            """,
+            "INSERT INTO games (title, developer, release_year, price) VALUES (%s, %s, %s, %s)",
             (title, developer, year, price)
         )
 
         game_id = cursor.lastrowid
 
-        # Ensure genre exists
         cursor.execute(
             "INSERT IGNORE INTO genres (genre_name) VALUES (%s)",
             (genre_name,)
         )
 
-        # Get genre id
         cursor.execute(
             "SELECT genre_id FROM genres WHERE genre_name = %s",
             (genre_name,)
         )
+
         genre_id = cursor.fetchone()[0]
 
-        # Link game + genre
         cursor.execute(
-            """
-            INSERT INTO game_genres (game_id, genre_id)
-            VALUES (%s, %s)
-            """,
+            "INSERT INTO game_genres (game_id, genre_id) VALUES (%s, %s)",
             (game_id, genre_id)
         )
 
@@ -106,18 +95,16 @@ def add_game_with_genre(connection, title, developer, year, price, genre_name):
         print("Game and genre added")
 
     except Error as e:
-        connection.rollback()
         print(f"Error: {e}")
+        connection.rollback()
     finally:
         cursor.close()
 
 
-# ---------------- LIBRARY ----------------
+# library
 def add_to_library_and_set_status(connection, user_id, game_id, status):
     try:
         cursor = connection.cursor()
-
-        connection.start_transaction()
 
         cursor.execute(
             """
@@ -132,13 +119,12 @@ def add_to_library_and_set_status(connection, user_id, game_id, status):
         print("Library updated")
 
     except Error as e:
-        connection.rollback()
         print(f"Error: {e}")
+        connection.rollback()
     finally:
         cursor.close()
 
 
-# ---------------- UPDATE ----------------
 def update_playtime(connection, user_id, game_id, hours):
     try:
         cursor = connection.cursor()
@@ -161,7 +147,7 @@ def update_playtime(connection, user_id, game_id, hours):
         cursor.close()
 
 
-# ---------------- VIEW WITH FILTERS ----------------
+# view libraries
 def view_libraries(connection, username=None, genre=None, min_hours=None):
     try:
         cursor = connection.cursor()
@@ -198,7 +184,7 @@ def view_libraries(connection, username=None, genre=None, min_hours=None):
         cursor.execute(query, values)
         results = cursor.fetchall()
 
-        print("\nUser Libraries:")
+        print("\nUser Libraries")
         for row in results:
             print(row)
 

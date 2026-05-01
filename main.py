@@ -8,79 +8,75 @@ def main():
 
     while True:
         print("\nSteam Tracker")
-        print("=" * 30)
         print("1. Add User")
-        print("2. Add Game")
-        print("3. Delete User + Library")
-        print("4. Add Game to Library + Set Status")
-        print("5. View All Libraries (Filter)")
+        print("2. Add Game + Genre")
+        print("3. Delete User")
+        print("4. Add Game to Library + Set Status (Transaction)")
+        print("5. View Libraries (Filters)")
         print("6. Update Playtime")
-        print("7. Add Genre to Game")
+        print("7. View Users")
         print("8. Exit")
 
-        choice = input("\nChoose: ")
+        choice = input("Choose: ")
 
         try:
-            # ADD USER
+            # ---------------- USER ----------------
             if choice == "1":
                 username = input("Username: ")
                 email = input("Email: ")
                 add_user(connection, username, email)
 
-            # ADD GAME
+            # ---------------- GAME + GENRE ----------------
             elif choice == "2":
                 title = input("Title: ")
                 developer = input("Developer: ")
                 year = int(input("Release Year: "))
                 price = float(input("Price: "))
-                add_game(connection, title, developer, year, price)
+                genre = input("Genre: ")
 
-            # DELETE USER
+                add_game_with_genre(connection, title, developer, year, price, genre)
+
+            # ---------------- DELETE USER ----------------
             elif choice == "3":
                 view_users(connection)
 
-                user_id = int(input("\nEnter User ID to delete: "))
-                confirm = input("Are you sure? (y/n): ")
+                user_id = int(input("User ID to delete: "))
+                confirm = input("Confirm delete (y/n): ")
 
-                if confirm.lower() == 'y':
-                    delete_user_with_library(connection, user_id)
+                if confirm.lower() == "y":
+                    delete_user(connection, user_id)
 
-            # LIBRARY TRANSACTION
+            # ---------------- TRANSACTION ----------------
             elif choice == "4":
                 user_id = int(input("User ID: "))
                 game_id = int(input("Game ID: "))
                 status = input("Status (wishlist, owned, playing, completed): ")
 
-                add_to_library_and_set_status(
-                    connection, user_id, game_id, status
-                )
+                add_to_library_and_set_status(connection, user_id, game_id, status)
 
-            # VIEW LIBRARIES
+            # ---------------- VIEW FILTERED ----------------
             elif choice == "5":
-                print("\n--- Filters (press enter to skip) ---")
+                username = input("Username (blank for all): ").strip() or None
+                genre = input("Genre (blank for all): ").strip() or None
+                hours = input("Min hours (blank for all): ").strip()
 
-                username = input("Username: ").strip() or None
-                genre = input("Genre: ").strip() or None
-                min_hours_input = input("Min hours: ").strip()
+                min_hours = int(hours) if hours else None
 
-                min_hours = int(min_hours_input) if min_hours_input else None
+                view_libraries(connection, username, genre, min_hours)
 
-                view_all_libraries(connection, username, genre, min_hours)
-
-            # UPDATE PLAYTIME
+            # ---------------- UPDATE ----------------
             elif choice == "6":
                 user_id = int(input("User ID: "))
                 game_id = int(input("Game ID: "))
-                hours = int(input("New hours played: "))
+                hours = int(input("Hours played: "))
+
                 update_playtime(connection, user_id, game_id, hours)
 
-            # ADD GENRE
+            # ---------------- VIEW USERS ----------------
             elif choice == "7":
-                game_id = int(input("Game ID: "))
-                genre = input("Genre: ")
-                add_game_genre(connection, game_id, genre)
+                view_users(connection)
 
-            # EXIT
+            # ---------------- EXIT ----------------
             elif choice == "8":
                 break
 
@@ -88,7 +84,7 @@ def main():
                 print("Invalid choice")
 
         except ValueError:
-            print("Invalid input type")
+            print("Invalid input")
 
     connection.close()
 

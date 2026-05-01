@@ -7,7 +7,7 @@ def main():
         return
 
     while True:
-        print("\n🎮 Steam Tracker")
+        print("\nSteam Tracker")
         print("1. Add User")
         print("2. Add Game")
         print("3. Delete User + Library")

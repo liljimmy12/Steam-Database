@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<h1>🎮 Steam Tracker</h1>
+<h1>Steam Tracker</h1>
 
 <p>
 Steam Tracker is a Python + MySQL application for tracking users, games, and game libraries.
@@ -179,7 +179,7 @@ python main.py
 </pre>
 
 <pre>
-🎮 Steam Tracker
+ Steam Tracker
 1. Add User
 2. Add Game
 3. Delete User + Library

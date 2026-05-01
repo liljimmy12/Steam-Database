@@ -1,4 +1,11 @@
-<h1>Steam Tracker</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+
+<h1>🎮 Steam Tracker</h1>
 
 <p>
 Steam Tracker is a Python + MySQL application for tracking users, games, and game libraries.
@@ -33,7 +40,7 @@ It uses a menu-driven CLI and a relational database to manage users, games, play
 <h2>Database Schema</h2>
 
 <h3>1. <code>users</code> Table</h3>
-<table>
+<table border="1" cellpadding="5">
 <tr><th>Column</th><th>Type</th><th>Description</th></tr>
 <tr><td>user_id</td><td>INT AUTO_INCREMENT</td><td>Primary Key</td></tr>
 <tr><td>username</td><td>VARCHAR(255)</td><td>User name</td></tr>
@@ -41,7 +48,7 @@ It uses a menu-driven CLI and a relational database to manage users, games, play
 </table>
 
 <h3>2. <code>games</code> Table</h3>
-<table>
+<table border="1" cellpadding="5">
 <tr><th>Column</th><th>Type</th><th>Description</th></tr>
 <tr><td>game_id</td><td>INT AUTO_INCREMENT</td><td>Primary Key</td></tr>
 <tr><td>title</td><td>VARCHAR(255)</td><td>Game title</td></tr>
@@ -51,14 +58,40 @@ It uses a menu-driven CLI and a relational database to manage users, games, play
 </table>
 
 <h3>3. <code>user_library</code> Table</h3>
-<table>
+<table border="1" cellpadding="5">
 <tr><th>Column</th><th>Type</th><th>Description</th></tr>
-<tr><td>user_id</td><td>INT</td><td>Foreign Key → users.user_id</td></tr>
-<tr><td>game_id</td><td>INT</td><td>Foreign Key → games.game_id</td></tr>
+<tr><td>user_id</td><td>INT</td><td>FK → users.user_id</td></tr>
+<tr><td>game_id</td><td>INT</td><td>FK → games.game_id</td></tr>
 <tr><td>status</td><td>VARCHAR(50)</td><td>wishlist, owned, playing, completed</td></tr>
 <tr><td>hours_played</td><td>INT</td><td>Total hours played</td></tr>
 </table>
 
+<hr>
+
+<h3>4. <code>genres</code> Table</h3>
+<table border="1" cellpadding="5">
+<tr><th>Column</th><th>Type</th><th>Description</th></tr>
+<tr><td>genre_id</td><td>INT AUTO_INCREMENT</td><td>Primary Key</td></tr>
+<tr><td>genre_name</td><td>VARCHAR(255)</td><td>Example: RPG, Shooter, Racing</td></tr>
+</table>
+
+<h3>5. <code>game_genres</code> (Junction Table)</h3>
+<table border="1" cellpadding="5">
+<tr><th>Column</th><th>Type</th><th>Description</th></tr>
+<tr><td>game_id</td><td>INT</td><td>FK → games.game_id</td></tr>
+<tr><td>genre_id</td><td>INT</td><td>FK → genres.genre_id</td></tr>
+<tr><td>PRIMARY KEY</td><td>(game_id, genre_id)</td><td>Each pair must be unique</td></tr>
+</table>
+
+<h3>6. <code>achievements</code> Table</h3>
+<table border="1" cellpadding="5">
+<tr><th>Column</th><th>Type</th><th>Description</th></tr>
+<tr><td>achievement_id</td><td>INT AUTO_INCREMENT</td><td>Primary Key</td></tr>
+<tr><td>game_id</td><td>INT</td><td>FK → games.game_id</td></tr>
+<tr><td>title</td><td>VARCHAR(255)</td><td>Name of the achievement</td></tr>
+<tr><td>description</td><td>TEXT</td><td>What the player must do</td></tr>
+<tr><td>points</td><td>INT</td><td>Optional score value</td></tr>
+</table>
 <hr>
 
 <h2>Installation & Setup</h2>
@@ -114,7 +147,7 @@ python main.py
 <p>You will see this menu:</p>
 
 <pre>
- Steam Tracker
+🎮 Steam Tracker
 1. Add User
 2. Add Game
 3. Delete User + Library
@@ -178,3 +211,5 @@ User: Bob   | Game: Doom | Hours: 14
   <li>Add API integration (e.g., Steam API)</li>
   <li>Add sorting/filtering options</li>
 </ul>
+
+<hr>

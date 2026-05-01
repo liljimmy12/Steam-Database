@@ -206,7 +206,7 @@ python main.py
 <p>Adds a game and updates status (wishlist → owned supported).</p>
 
 <h3>View Libraries</h3>
-<p>Displays all users and their games using JOIN queries.</p>
+<p>Displays all users and their games using JOIN queries. You are able to filter three options.</p>
 
 <h3>Update Playtime</h3>
 <p>Updates hours played.</p>
@@ -228,7 +228,6 @@ python main.py
   <li>CSV export</li>
   <li>GUI (Tkinter / PyQt)</li>
   <li>Steam API integration</li>
-  <li>Filtering & sorting</li>
 </ul>
 
 <hr>
